@@ -26,6 +26,7 @@ jobs:
           - windows-latest
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
 
     steps:
       - name: Set git to not perform line ending conversions
@@ -50,6 +51,7 @@ jobs:
     name: Check clippy and format
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -80,6 +82,7 @@ jobs:
     name: Check for changes in `Cargo.toml` and `Cargo.lock`
 
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: github.event_name == 'pull_request'
 
     steps:
@@ -105,6 +108,7 @@ jobs:
     name: Verify MSRV (Minimum Supported Rust Version)
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -118,6 +122,7 @@ jobs:
     name: Run benchmarks for `--glob` option
 
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -134,6 +139,7 @@ jobs:
   build-test-feature-powerset:
     name: Build and test feature powerset
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: swatinem/rust-cache@v2
@@ -151,6 +157,7 @@ jobs:
     # using `insta`. macOS works (locally as well) and is the fastest runner anyway, so
     # just use that. See also https://github.com/xd009642/tarpaulin/issues/517
     runs-on: macos-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -175,6 +182,7 @@ jobs:
     name: Execute release chores
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     # Only run this on push events: `pull_request` events will not have access to
     # secrets if coming from forks, and we do not care about release chores there
@@ -239,6 +247,7 @@ jobs:
             extension: ".exe"
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     env:
       ASSET_FILE: "${{ matrix.crate }}-${{ matrix.target }}.tgz"
@@ -285,6 +294,7 @@ jobs:
     name: Publish to crates.io - dry run
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -298,6 +308,7 @@ jobs:
     name: Publish to crates.io
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs:
       - release-please
     # Assumption: if release created, tests ran in corresponding PR, so it's safe to not
@@ -322,6 +333,7 @@ jobs:
     name: Turn release draft into full release
 
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs:
       - release-please
       - build-upload
@@ -356,6 +368,7 @@ jobs:
       - publish
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
 
     steps:
       - uses: cargo-bins/cargo-binstall@main
