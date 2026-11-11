@@ -1,3 +1,11 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 4 optimizations:
+# - [HIGH] Add cargo dependency cache to "build-test" job
+# - [HIGH] Add cargo dependency cache to "build-upload" job
+# - [HIGH] Switch "build-test-coverage" from macOS to ubuntu runner
+# - [MEDIUM] Add concurrency group to "main.yml"
+# Estimated savings: ~18 min/run
+#
 name: Main
 
 on:
@@ -11,6 +19,10 @@ on:
       - main
       - dev
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 env:
   CARGO_TERM_COLOR: always
 
